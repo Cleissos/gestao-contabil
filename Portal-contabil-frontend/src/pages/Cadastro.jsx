@@ -7,31 +7,38 @@ import { useNavigate } from 'react-router-dom';
 export default function Cadastro() {
     const [formData, setFormData] = useState({ 
         nome: '', 
+        email: '', // ADICIONADO: Novo estado para o e-mail
         documento: '', // Será o CRC e também o login
         password: ''
     });
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleCadastro = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
-            // Payload ajustado para o RegistroContadorDTO do seu Backend
+            // Payload perfeitamente alinhado com o RegistroContadorDTO do Backend
             const payload = {
                 login: formData.documento, 
                 password: formData.password,
                 nome: formData.nome,
-                registroProfissional: formData.documento
+                registroProfissional: formData.documento,
+                email: formData.email // ADICIONADO: Enviando o e-mail para o backend
             };
 
             // Envia para a rota de registro de contador
             await api.post('/auth/register/contador', payload);
             
             alert("Conta de Contador criada com sucesso!");
-            navigate('/login'); // Redireciona para a tela de login
+            navigate('/login'); // Redireciona para a tela de login APENAS se o banco aceitar
         } catch (error) {
             console.error("Erro no cadastro:", error);
-            alert("Erro ao cadastrar. Verifique se o CRC já está em uso ou se o servidor está ativo.");
+            const msgErro = error.response?.data || "Verifique se o CRC/E-mail já está em uso ou se o servidor está ativo.";
+            alert("Erro ao cadastrar: " + msgErro);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -61,6 +68,18 @@ export default function Cadastro() {
                                 onChange={(e) => setFormData({ ...formData, nome: e.target.value })} 
                             />
 
+                            {/* NOVO CAMPO: Entrada do E-mail obrigatório */}
+                            <TextField 
+                                fullWidth 
+                                label="E-mail" 
+                                type="email"
+                                margin="normal" 
+                                required
+                                helperText="O e-mail será usado para recuperação de senha."
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })} 
+                            />
+
                             <TextField 
                                 fullWidth 
                                 label="Número do CRC" 
@@ -81,16 +100,16 @@ export default function Cadastro() {
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })} 
                             />
 
+                            {/* CORREÇÃO: Removido o onClick do botão que causava o redirecionamento precoce */}
                             <Button 
-                            
                                 fullWidth 
                                 variant="contained" 
                                 type="submit" 
                                 size="large" 
+                                disabled={loading}
                                 sx={{ mt: 3, py: 1.5, backgroundColor: '#1a237e', fontWeight: 'bold' }}
-                                onClick={() => navigate("/login")}
                             >
-                                FINALIZAR CADASTRO
+                                {loading ? "CADASTRANDO..." : "FINALIZAR CADASTRO"}
                             </Button>
                             
                             <Button 

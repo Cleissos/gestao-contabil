@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { 
-    Box, Typography, Paper, Table, TableBody, TableCell, 
+import {
+    Box, Typography, Paper, Table, TableBody, TableCell,
     TableContainer, TableHead, TableRow, IconButton, Tooltip,
     TextField, InputAdornment, Chip, Button
 } from '@mui/material';
-import { Edit, Visibility, Person, Search, Add } from '@mui/icons-material';
+import { Edit, Visibility, Person, Search, Add, Chat } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom'; // Para o vínculo com documentos
 import Layout from '../components/Layout.jsx';
 import api from '../services/api';
@@ -28,7 +28,7 @@ export default function GestaoClientes() {
     };
 
     // Filtro Lógico: Filtra os clientes conforme o que é digitado
-    const clientesFiltrados = clientes.filter(c => 
+    const clientesFiltrados = clientes.filter(c =>
         c.nome.toLowerCase().includes(busca.toLowerCase()) ||
         c.cpfCnpj.includes(busca)
     );
@@ -36,15 +36,15 @@ export default function GestaoClientes() {
     return (
         <Layout title="Gestão de Clientes">
             <Box sx={{ p: 3 }}>
-                
+
                 {/* Cabeçalho da Lista */}
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                     <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#1a237e' }}>
                         Lista de Clientes Ativos
                     </Typography>
-                    
-                    <Button 
-                        variant="contained" 
+
+                    <Button
+                        variant="contained"
                         startIcon={<Add />}
                         onClick={() => navigate('/cadastrar-cliente')} // Ajuste a rota se necessário
                         sx={{ bgcolor: '#1a237e' }}
@@ -96,15 +96,27 @@ export default function GestaoClientes() {
                                     <TableCell>{cliente.tipo}</TableCell>
                                     <TableCell>{cliente.cpfCnpj}</TableCell>
                                     <TableCell>
-                                        <Chip 
-                                            label="Ativo" 
-                                            size="small" 
-                                            sx={{ bgcolor: '#e8f5e9', color: '#2e7d32', fontWeight: 'bold' }} 
+                                        <Chip
+                                            label="Ativo"
+                                            size="small"
+                                            sx={{ bgcolor: '#e8f5e9', color: '#2e7d32', fontWeight: 'bold' }}
                                         />
                                     </TableCell>
                                     <TableCell align="center">
+
+                                        {/* Botão de Chat Adicionado Aqui */}
+                                        <Tooltip title="Abrir Chat">
+                                            <IconButton
+                                                sx={{ color: '#1a237e' }}
+                                                // onClick={() => navigate(`/chat?clienteId=${cliente.id}`)}
+                                                onClick={() => navigate(`/chat/${cliente.id}`)}
+                                            >
+                                                <Chat />
+                                            </IconButton>
+                                        </Tooltip>
+
                                         <Tooltip title="Ver Documentos">
-                                            <IconButton 
+                                            <IconButton
                                                 color="primary"
                                                 onClick={() => navigate('/gestao-documentos', { state: { clienteId: cliente.id } })}
                                             >

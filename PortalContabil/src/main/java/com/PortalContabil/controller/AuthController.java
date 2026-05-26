@@ -1,6 +1,8 @@
 package com.PortalContabil.controller;
 
+import com.PortalContabil.dto.EsqueciSenhaDTO;
 import com.PortalContabil.dto.LoginDTO;
+import com.PortalContabil.dto.RedefinirSenhaDTO;
 import com.PortalContabil.dto.RegistroContadorDTO;
 import com.PortalContabil.model.Contador;
 import com.PortalContabil.model.User;
@@ -53,9 +55,11 @@ public class AuthController {
 
             // 1. Criar e salvar a conta de ACESSO (User)
             User newUser = new User();
+            newUser.setNome(data.nome());
             newUser.setLogin(data.login());
             newUser.setPassword(encryptedPassword);
             newUser.setRole(UserRole.CONTADOR);
+            newUser.setEmail(data.email()); //  ADICIONADO: Salvando o e-mail no banco de dados
 
             // Ao salvar aqui, o ID UUID é gerado
             User userSalvo = this.userRepository.save(newUser);
@@ -85,8 +89,36 @@ public class AuthController {
                     .orElse(ResponseEntity.notFound().build());
         } else {
             return clienteRepository.findById(userLogado.getId())
-                    .map(c -> ResponseEntity.ok(java.util.Map.of("nome", c.getNome(), "role", "CLIENTE")))
+//                    .map(c -> ResponseEntity.ok(java.util.Map.of("nome", c.getNome(), "role", "CLIENTE", "contadorId", c.getId())))
+                    .map(c -> ResponseEntity.ok(java.util.Map.of(
+                            "nome", c.getNome(),
+                            "role", "CLIENTE",
+                            "contadorId", c.getContador().getUserAccount().getId() // Busca o ID de acesso do contador
+                    )))
                     .orElse(ResponseEntity.notFound().build());
+        }
+    }
+
+    // --- NOVO: ENDPOINT PARA SOLICITAR O LINK DE RECUPERAÇÃO ---
+    @PostMapping("/esqueci-senha")
+    public ResponseEntity<?> esqueciSenha(@RequestBody @Valid EsqueciSenhaDTO data) {
+        try {
+            authService.solicitarRecuperacaoSenha(data.email());
+            return ResponseEntity.ok(java.util.Map.of("mensagem", "Link de recuperação enviado com sucesso para o seu e-mail!"));
+        } catch (RuntimeException e) {
+            // Retorna um erro amigável caso o e-mail não exista
+            return ResponseEntity.badRequest().body(java.util.Map.of("erro", e.getMessage()));
+        }
+    }
+
+    // --- NOVO: ENDPOINT PARA SALVAR A NOVA SENHA ---
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<?> redefinirSenha(@RequestBody @Valid RedefinirSenhaDTO data) {
+        try {
+            authService.redefinirSenha(data.token(), data.novaSenha());
+            return ResponseEntity.ok(java.util.Map.of("mensagem", "Senha alterada com sucesso!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("erro", e.getMessage()));
         }
     }
 

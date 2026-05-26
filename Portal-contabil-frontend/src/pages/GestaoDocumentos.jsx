@@ -95,36 +95,6 @@ export default function GestaoDocumentos() {
         }
     };
 
-    // const handleVisualizar = async (id) => {
-    //     try {
-    //         const response = await api.get(`/documentos/download/${id}`, {
-    //             responseType: 'blob'
-    //         });
-
-    //         // Verificamos o tipo que o servidor mandou
-    //         const type = response.headers['content-type'] || 'application/pdf';
-
-    //         const file = new Blob([response.data], { type: type });
-    //         const fileURL = URL.createObjectURL(file);
-
-    //         // Criamos um iframe temporário ou abrimos a aba
-    //         // DICA: Se for PDF, o browser lida bem. Se for imagem, também.
-    //         const win = window.open();
-    //         if (win) {
-    //             win.document.write(
-    //                 `<iframe src="${fileURL}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`
-    //             );
-    //             win.document.title = "Visualizando Documento";
-    //         } else {
-    //             alert("O bloqueador de pop-ups impediu a visualização.");
-    //         }
-
-    //     } catch (error) {
-    //         console.error("Erro detalhado:", error);
-    //         alert("Erro ao abrir visualização.");
-    //     }
-    // };
-
     const handleVisualizar = async (id) => {
         try {
             const response = await api.get(`/documentos/download/${id}`, {
@@ -174,7 +144,7 @@ export default function GestaoDocumentos() {
                     <CloudUpload sx={{ fontSize: 50, color: '#1a237e', mb: 2 }} />
                     <Typography variant="h6">Selecione um documento para upload</Typography>
                     <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                        Formatos aceitos: PDF, PNG, JPG (Máx: 5MB)
+                        Formatos aceitos: PDF, PNG, JPG (Máx: 10MB)
                     </Typography>
 
                     <Button

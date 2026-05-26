@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -29,18 +30,25 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
 
         if(token != null) {
-            var login = tokenService.validateToken(token);
-            // Pequeno ajuste aqui: use o nome da sua classe explicitamente se houver conflito
-            var userOptional = userRepository.findByLogin(login);
+            // Agora o 'subject' retornado pelo validateToken é o ID (UUID) em formato String
+            var subject = tokenService.validateToken(token);
 
-            if (userOptional.isPresent()) {
-                UserDetails user = (UserDetails) userOptional.get();
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                // Buscamos pelo ID (UUID) em vez de Login
+                UUID userId = UUID.fromString(subject);
+                var userOptional = userRepository.findById(userId);
+
+                if (userOptional.isPresent()) {
+                    UserDetails user = (UserDetails) userOptional.get();
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (IllegalArgumentException e) {
+                // Caso o token seja antigo e ainda tenha o "login" escrito, ele ignora e pede novo login
+                System.out.println("Token inválido ou em formato antigo");
             }
         }
 
-        // ESTA LINHA DEVE FICAR FORA DO IF:
         filterChain.doFilter(request, response);
     }
 

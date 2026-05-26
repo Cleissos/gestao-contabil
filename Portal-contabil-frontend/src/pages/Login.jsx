@@ -18,6 +18,7 @@ export default function Login() {
 
             localStorage.setItem('token', token);
             localStorage.setItem('role', role);
+            localStorage.setItem('userId', response.data.id); // ESSENCIAL PARA O CHAT
 
             // Redireciona baseado na Role que vem do seu Backend
             if (role === 'CONTADOR') navigate('/dashboard-contador');
@@ -87,6 +88,18 @@ export default function Login() {
                                 }
                             }}
                         />
+
+                        {/* LINK ADICIONADO PARA RECUPERAÇÃO DE SENHA */}
+                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                            <Button
+                                variant="text"
+                                size="small"
+                                onClick={() => navigate('/esqueci-senha')}
+                                sx={{ color: '#1a237e', textTransform: 'none', fontWeight: 500 }}
+                            >
+                                Esqueci minha senha
+                            </Button>
+                        </Box>
 
                         <Button
                             fullWidth

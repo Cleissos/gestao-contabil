@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +28,20 @@ public class User implements UserDetails {
     @JdbcTypeCode(SqlTypes.UUID)
     private UUID id;
 
+    @Column(nullable = false)
+    private String nome; // Adicione este campo para salvar o Nome ou Razão Social
+
     @Column(nullable = false, unique = true)
     private String login; // CPF, CNPJ ou CRC
+
+    // --- NOVOS CAMPOS PARA RECUPERAÇÃO DE SENHA ---
+    @Column(nullable = false, unique = true)
+    private String email; // O e-mail onde o usuário vai receber o link
+
+    private String tokenRecuperacao; // Guarda o token temporário gerado
+
+    private LocalDateTime expiracaoToken; // Guarda a data/hora limite para usar o token
+    // ----------------------------------------------
 
     @Column(nullable = false)
     private String password;

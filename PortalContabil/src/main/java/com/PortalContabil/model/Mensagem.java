@@ -35,4 +35,7 @@ public class Mensagem {
     @ManyToOne
     @JoinColumn(name = "destinatario_id")
     private User destinatario;
+
+    private boolean lida = false;
+    private LocalDateTime dataLeitura;
 }

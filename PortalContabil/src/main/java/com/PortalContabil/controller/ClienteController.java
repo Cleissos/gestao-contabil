@@ -56,7 +56,7 @@ public class ClienteController {
                 cliente.getCpfCnpj(),
                 cliente.getTipoCliente().name(), // Assume que Tipo é um Enum (PF/PJ)
                 cliente.getUserAccount().getLogin(), // Login de acesso do cliente
-                cliente.getUserAccount().getLogin() // Ou outro campo de email se houver
+                cliente.getUserAccount().getEmail()  //  CORRIGIDO: Agora retorna o e-mail real salvo no banco!
         )).collect(Collectors.toList());
 
         return ResponseEntity.ok(response);

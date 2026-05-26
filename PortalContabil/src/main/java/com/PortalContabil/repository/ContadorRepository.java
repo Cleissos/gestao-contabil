@@ -14,4 +14,6 @@ public interface ContadorRepository extends JpaRepository<Contador, UUID> {
 
     // Busca pelo CRC caso precise validar algo específico
     Optional<Contador> findByRegistroProfissional(String registroProfissional);
+
+
 }

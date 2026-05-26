@@ -7,6 +7,12 @@ import CadastroCliente from './pages/CadastroCliente';
 import GestaoDocumentos from './pages/GestaoDocumentos';
 import GestaoClientes from './pages/GestaoClientes';
 import HistoricoDocumentos from './pages/HistoricoDocumentos';
+import ChatPage from './pages/ChatPage';
+import MensagensGerais from './pages/MensagensGerais';
+import EsqueciSenha from './pages/EsqueciSenha';
+import RedefinirSenha from './pages/RedefinirSenha';
+import Pendencias from './pages/Pendencias';
+import MinhasPendencias from './pages/MinhasPendencias';
 
 const PrivateRoute = ({ children, allowedRole }) => {
   const token = localStorage.getItem('token');
@@ -78,10 +84,37 @@ function App() {
             <GestaoDocumentos />
           </PrivateRoute>
         } />
-        <Route path="*" element={<Navigate to="/login" />} />
+
+        {/* 2. REGISTRE A ROTA DO CHAT AQUI */}
+        <Route path="/chat" element={
+          <PrivateRoute>
+            <ChatPage />
+          </PrivateRoute>
+        } />
+
+        {/* <Route path="/chat/:clienteId" element={<ChatPage />} /> */}
+        <Route path="/chat/:id" element={<ChatPage />} />
+
+        <Route path="/mensagens-gerais" element={
+          <PrivateRoute allowedRole="CONTADOR">
+            <Layout title="Mensagens Recebidas">
+              <MensagensGerais />
+            </Layout>
+          </PrivateRoute>
+        } />
 
         // Dentro do seu Routes
         <Route path="/historico-documentos" element={<HistoricoDocumentos />} />
+
+
+        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+        <Route path="/redefinir-senha" element={<RedefinirSenha />} />
+
+        {/* 💡 2. ADICIONAR A ROTA EXATA QUE ESTÁ NO SEU LAYOUT */}
+        <Route path="/pendencias" element={<Pendencias />} />
+        <Route path="/minhas-pendencias" element={<MinhasPendencias />} />
+
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
   );

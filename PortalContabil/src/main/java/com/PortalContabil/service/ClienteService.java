@@ -12,48 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-//
-//@Service
-//public class ClienteService {
-//
-//    @Autowired
-//    private ClienteRepository clienteRepository;
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    private ContadorRepository contadorRepository;
-//
-//    @Transactional // Garante que se um erro ocorrer, nada seja salvo
-//    public void cadastrarNovoCliente(ClienteCreateDTO data, User userContadorLogado) {
-//
-//        // 1. Criar a conta de login (User) para o Cliente
-//        User novoUser = new User();
-//        novoUser.setLogin(data.cpfCnpj()); // O login do cliente será o CPF/CNPJ
-//        novoUser.setPassword(passwordEncoder.encode(data.password())); // Senha definida pelo contador
-//        novoUser.setRole(UserRole.CLIENTE);
-//        // Salvamos primeiro o usuário para gerar o ID dele
-//        userRepository.save(novoUser);
-//
-//        // 2. Buscar o perfil do Contador que está logado
-//        Contador contadorPerfil = contadorRepository.findByUserAccount(userContadorLogado)
-//                .orElseThrow(() -> new RuntimeException("Contador não encontrado"));
-//
-//        // 3. Criar o Cliente (Dados)
-//        Cliente novoCliente = new Cliente();
-//        novoCliente.setNome(data.nome());
-//        novoCliente.setCpfCnpj(data.cpfCnpj());
-//        novoCliente.setTipoCliente(data.tipoCliente());
-//        novoCliente.setUserAccount(novoUser); // Vincula à conta de login criada acima
-//        novoCliente.setContador(contadorPerfil); // O contador que está logado agora
-//
-//        clienteRepository.save(novoCliente);
-//    }
-//}
 
 @Service
 public class ClienteService {
@@ -73,8 +31,10 @@ public class ClienteService {
         // 1. Criar a conta de login (User) para o Cliente
         User novoUser = new User();
         novoUser.setLogin(data.cpfCnpj());
+        novoUser.setNome(data.nome());
         novoUser.setPassword(passwordEncoder.encode(data.password()));
         novoUser.setRole(UserRole.CLIENTE);
+        novoUser.setEmail(data.email()); //  ADICIONADO: Salvando o e-mail enviado pelo DTO
 
         // Salva o usuário para gerar o ID UUID
         User userClienteSalvo = userRepository.save(novoUser);

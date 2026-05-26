@@ -24,19 +24,7 @@ api.interceptors.request.use(
   }
 );
 
-// INTERCEPTOR DE RESPOSTA (Prevenção de Erros - IHC)
-// Se o servidor retornar 403 (Proibido) ou 401 (Não autorizado), 
-// limpamos o sistema e mandamos o usuário de volta para o login.
-// api.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-//       localStorage.clear();
-//       window.location.href = '/'; // Redirecionamento forçado para segurança
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+
 
 api.interceptors.response.use(
     (response) => response,
