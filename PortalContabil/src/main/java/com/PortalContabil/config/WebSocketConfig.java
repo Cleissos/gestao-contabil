@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-portal")
-                .setAllowedOrigins("http://localhost:5173") // URL do seu React
+                .setAllowedOrigins("https://portalcontabil.site") // URL do seu React
                 .withSockJS();
     }
 }

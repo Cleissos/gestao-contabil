@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Criamos a instância base do Axio
 const api = axios.create({
-    baseURL: 'http://localhost:8080', // URL do seu Backend Spring Boot
+    baseURL: 'https://gestao-contabil.onrender.com', // URL do seu Backend Spring Boot
     headers: {
         'Content-Type': 'application/json'
     }
