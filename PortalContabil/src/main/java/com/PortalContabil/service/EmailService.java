@@ -43,7 +43,7 @@ public class EmailService {
         message.setTo(emailDestinatario);
         message.setSubject("⚠️ Nova Pendência Cadastrada - Portal Contábil");
 
-        String linkPortal = "http://localhost:5173/login"; // Link do seu frontend
+        String linkPortal = "https://portalcontabil.site/login"; // Link do seu frontend
 
         String conteudo = "Olá, " + nomeCliente + ",\n\n"
                 + "O seu escritório de contabilidade cadastrou uma nova obrigação no sistema:\n\n"

@@ -103,7 +103,6 @@ function App() {
           </PrivateRoute>
         } />
 
-        // Dentro do seu Routes
         <Route path="/historico-documentos" element={<HistoricoDocumentos />} />
 
 

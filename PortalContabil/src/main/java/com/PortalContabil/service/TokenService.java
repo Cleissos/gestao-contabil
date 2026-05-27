@@ -20,12 +20,6 @@ public class TokenService {
     public String generateToken(User user) {
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
-//            return JWT.create()
-//                    .withIssuer("portalContabil-api")
-//                    .withSubject(user.getLogin()) // Identifica o usuário pelo CPF/CNPJ
-//                    .withClaim("id", user.getId().toString()) // Guarda o UUID no token
-//                    .withExpiresAt(genExpirationDate()) // Define validade (ex: 2 horas)
-//                    .sign(algorithm);
             return JWT.create()
                     .withIssuer("portalContabil-api")
                     .withSubject(user.getId().toString()) // Mude aqui para ID!

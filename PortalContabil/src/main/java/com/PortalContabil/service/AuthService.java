@@ -63,9 +63,9 @@ public class AuthService {
 
         // 4. Monta o link que aponta para o seu Frontend React (Porta 5173 do Vite ou 3000)
         // Quando estiver hospedado, você mudará esse "localhost" para o link oficial do site
-        String linkRecuperacao = "http://localhost:5173/redefinir-senha?token=" + token;
+        String linkRecuperacao = "http://portalcontabil.site/redefinir-senha?token=" + token;
 
-        // 5. Dispara o e-mail usando a Senha de App do Gmail
+        // 5. Dispara o e-mail usando o SMTP configurado
         emailService.enviarEmailRecuperacao(user.getEmail(), linkRecuperacao);
     }
 
