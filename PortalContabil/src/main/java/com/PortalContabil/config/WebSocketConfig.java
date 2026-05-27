@@ -6,6 +6,25 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+//@Configuration
+//@EnableWebSocketMessageBroker
+//public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+//
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry config) {
+//        config.enableSimpleBroker("/user"); // Canal para mensagens privadas
+//        config.setApplicationDestinationPrefixes("/app");
+//        config.setUserDestinationPrefix("/user");
+//    }
+//
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/ws-portal")
+//                .setAllowedOrigins("https://portalcontabil.site") // URL do seu React
+//                .withSockJS();
+//    }
+//}
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -20,7 +39,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-portal")
-                .setAllowedOrigins("https://portalcontabil.site") // URL do seu React
+                // ADICIONE AS DUAS VARIANTES DO SEU SITE E O LOCALHOST PARA TESTES
+                .setAllowedOrigins(
+                        "https://portalcontabil.site",
+                        "https://www.portalcontabil.site",
+                        "http://localhost:5173" // Porta padrão do Vite/React para você testar local
+                )
                 .withSockJS();
     }
 }
